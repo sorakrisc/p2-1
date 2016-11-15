@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ad70f558-f40c-442e-8c9e-5cb1f04526d2" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/p2.1-starter.iws" afterPath="$PROJECT_DIR$/p2.1-starter.iws" />
-    </list>
+    <list default="true" id="ad70f558-f40c-442e-8c9e-5cb1f04526d2" name="Default" comment="" />
     <ignored path="p2.1-starter.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -88,7 +86,7 @@
       <file leaf-file-name="DataModel.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/io/muic/dcom/p2/DataModel.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
+            <state relative-caret-position="333">
               <caret line="53" column="9" selection-start-line="53" selection-start-column="9" selection-end-line="53" selection-end-column="9" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -992,7 +990,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/io/muic/dcom/p2/DataModel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
+        <state relative-caret-position="333">
           <caret line="53" column="9" selection-start-line="53" selection-start-column="9" selection-end-line="53" selection-end-column="9" />
           <folding>
             <element signature="imports" expanded="true" />
