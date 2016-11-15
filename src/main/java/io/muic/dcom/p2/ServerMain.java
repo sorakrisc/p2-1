@@ -8,8 +8,8 @@ import java.util.List;
 
 public class ServerMain {
     static class Config {
-        public static final int DEFAULT_NUM_THREADS = 4;
-        public static final int DEFAULT_PORT = 9090;
+        public static final int DEFAULT_NUM_THREADS = 6;
+        public static final int DEFAULT_PORT = 9563;
     }
 
     public static void main(String args[]) {
@@ -48,8 +48,7 @@ public class ServerMain {
             if (null != parcelId && parcelId.length()>0) {
                 List<DataModel.ParcelObserved> trail = model.getParcelTrail(parcelId);
                 // order the parcel trail by timestamp from earliest and on
-                trail.sort((eventA, eventB) ->
-                                Long.compare(eventA.getTimeStamp(), eventB.getTimeStamp()));
+                trail.sort((eventA, eventB) -> Long.compare(eventA.getTimeStamp(), eventB.getTimeStamp()));
                 return (new Gson()).toJson(trail);
             }
             else {
