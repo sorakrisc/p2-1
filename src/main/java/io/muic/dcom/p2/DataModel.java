@@ -1,9 +1,13 @@
 package io.muic.dcom.p2;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 public class DataModel {
@@ -18,9 +22,8 @@ public class DataModel {
             this.timeStamp = ts_;
         }
         public int compareTo(ParcelObserved a){
-            return Long.compare(this.getTimeStamp(),a.getTimeStamp());
+            return Long.compare(this.getTimeStamp(),a.getTimeStamp()) != 0 ? Long.compare(this.getTimeStamp(),a.getTimeStamp()) : this.getStationId().compareTo(a.getStationId());
         }
-
 
         public String getParcelId() { return parcelId; }
         public String getStationId() { return stationId; }
@@ -29,34 +32,27 @@ public class DataModel {
 
     private ConcurrentHashMap<String, ConcurrentSkipListSet<ParcelObserved>> transactions_trail;
     //stationID, long or count
-    private ConcurrentHashMap<String, Long> transactions_stop_count;
+    private ConcurrentHashMap<String, AtomicLong> transactions_stop_count;
     DataModel() {
         transactions_trail = new ConcurrentHashMap<>();
         transactions_stop_count = new ConcurrentHashMap<>();
     }
     public void update_stop_count(String stationId){
-        if (transactions_stop_count.containsKey(stationId)){
-            Long oldCount=transactions_stop_count.get(stationId)+1L;
-            transactions_stop_count.put(stationId, oldCount);
+        AtomicLong alvalue= transactions_stop_count.putIfAbsent(stationId, new AtomicLong(1));
+        if (alvalue != null){
+            alvalue.getAndIncrement();
         }
-        else{
-            transactions_stop_count.put(stationId, 1L);
-        }
-
     }
 
     public void postObserve(String parcelId, String stationId, long timestamp) {
         ParcelObserved parcelObserved = new ParcelObserved(parcelId, stationId, timestamp);
         //parcelId already exist add the object then add count
-        if (transactions_trail.containsKey(parcelId)){
-            transactions_trail.get(parcelId).add(parcelObserved);
-            update_stop_count(stationId);
-        }
-        else {
-            transactions_trail.put(parcelId, new ConcurrentSkipListSet<ParcelObserved>(){{
-                add(parcelObserved);
-            }});
-            update_stop_count(stationId);
+        ConcurrentSkipListSet<ParcelObserved> value = transactions_trail.putIfAbsent(parcelId, new ConcurrentSkipListSet<ParcelObserved>(){{
+            add(parcelObserved);
+        }});
+        update_stop_count(stationId);
+        if (value!=null){
+            value.add(parcelObserved);
         }
     }
 
@@ -65,7 +61,7 @@ public class DataModel {
     }
 
     public long getStopCount(String stationId) {
-        return transactions_stop_count.get(stationId);
+        return transactions_stop_count.get(stationId).longValue();
 
     }
 }
